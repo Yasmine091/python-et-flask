@@ -108,7 +108,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\"\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\",\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
           "type": "json"
         }
       ]
@@ -190,7 +190,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\"\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\",\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
           "type": "json"
         }
       ]
@@ -305,7 +305,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\"\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\",\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
           "type": "json"
         }
       ]
@@ -408,7 +408,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\"\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\",\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
           "type": "json"
         }
       ]
@@ -498,7 +498,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\"\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"title\": \"PyMongo\",\n    \"description\" : \"Une veille sur l'utilisation de PyMongo\",\n    \"url\" : \"https://flapymon.herokuapp.com/\",\n    \"author\" : \"John Doe\",\n    \"tags\" : [\"Flask\", \"Python\", \"MongoDB\"]\n}",
           "type": "json"
         }
       ]
