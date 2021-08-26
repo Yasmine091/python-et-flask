@@ -2,7 +2,10 @@ from flask import Flask, render_template, request, jsonify, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='', 
+            static_folder='apidoc/',
+            template_folder='templates/')
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask-API"
 #'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false'
 #'mongodb://Yasmine:*****@localhost:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false'
@@ -14,8 +17,22 @@ def home():
     
 @app.route("/api/v1")
 def documentation():
-    return render_template("index.html")
+    return app.send_static_file("index.html")
 
+
+"""
+@api {get} /topic/:id Voir une veille
+@apiName getTopic
+@apiGroup Topic
+
+@apiParam {Number} _id ID unique des veilles.
+
+@apiSuccess {String} title Titre de la veille.
+@apiSuccess {String} description Description de la veille.
+@apiSuccess {String} url Lien de la veille.
+@apiSuccess {String} author Autheur de la veille.
+@apiSuccess {Array} tags Tags.
+"""
 @app.route("/api/v1/topics", methods=['GET'])
 def getTopics():
     topic = mongo.db.topics

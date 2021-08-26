@@ -1,0 +1,7 @@
+{
+  "name": "Flask API",
+  "version": "0.1.0",
+  "description": "Documentation d'une API Flask",
+  "title": "API - Documentation",
+  "url" : "https://flapymon.herokuapp.com/api/v1"
+}
