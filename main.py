@@ -8,9 +8,7 @@ app = Flask(__name__,
             template_folder='templates/')
 
 app.config["MONGO_URI"] = "mongodb+srv://Yasmine:TUk7taF38eWcx62X@flask-api.ty5l6.mongodb.net/test"
-app.config['MONGODB_SETTINGS'] = {
-    "db": "Flask-API",
-}
+
 # TUk7taF38eWcx62X
 #'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false'
 #'mongodb://Yasmine:*****@localhost:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false'
