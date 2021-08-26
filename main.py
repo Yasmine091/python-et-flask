@@ -9,8 +9,6 @@ app = Flask(__name__,
 
 app.config["MONGO_URI"] = "mongodb+srv://Yasmine:TUk7taF38eWcx62X@flask-api.ty5l6.mongodb.net/Flask-API?retryWrites=true&w=majority"
 # TUk7taF38eWcx62X
-#'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false'
-#'mongodb://Yasmine:*****@localhost:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false'
 mongo = PyMongo(app)
 
 @app.route("/")
@@ -49,7 +47,7 @@ def documentation():
         "title": "PyMongo",
         "description" : "Une veille sur l'utilisation de PyMongo",
         "url" : "https://flapymon.herokuapp.com/",
-        "author" : "John Doe"
+        "author" : "John Doe",
         "tags" : ["Flask", "Python", "MongoDB"]
     }
 """
