@@ -6,6 +6,7 @@ app = Flask(__name__,
             static_url_path='', 
             static_folder='apidoc/',
             template_folder='templates/')
+
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask-API"
 #'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false'
 #'mongodb://Yasmine:*****@localhost:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false'
@@ -14,6 +15,10 @@ mongo = PyMongo(app)
 @app.route("/")
 def home():
     return redirect("/api/v1", code=302)
+
+@app.route("/api")
+def api_url():
+    return redirect("/api/v1", code=302)
     
 @app.route("/api/v1")
 def documentation():
@@ -21,17 +26,63 @@ def documentation():
 
 
 """
-@api {get} /topic/:id Voir une veille
-@apiName getTopic
-@apiGroup Topic
+@apiDefine TopicNotFoundError
 
-@apiParam {Number} _id ID unique des veilles.
+@apiError TopicNotFound L'id de la veille n'a pas été trouvé.
 
+@apiErrorExample Error-Response:
+    HTTP/1.1 404 Not Found
+    {
+      "Error : Topic not found"
+    }
+"""
+
+"""
+@apiDefine TopicFound
+
+@apiError TopicFound L'id de la veille a été trouvé.
+
+@apiSuccessExample Success-Response:
+    HTTP/1.1 200 OK
+    {
+        "title": "PyMongo",
+        "description" : "Une veille sur l'utilisation de PyMongo",
+        "url" : "https://flapymon.herokuapp.com/",
+        "author" : "John Doe"
+        "tags" : ["Flask", "Python", "MongoDB"]
+    }
+"""
+
+"""
+@apiDefine SuccessResult
+
+@apiSuccess {Number} _id ID de la veille.
 @apiSuccess {String} title Titre de la veille.
 @apiSuccess {String} description Description de la veille.
 @apiSuccess {String} url Lien de la veille.
 @apiSuccess {String} author Autheur de la veille.
-@apiSuccess {Array} tags Tags.
+@apiSuccess {String[]} tags Tags.
+"""
+
+"""
+@apiDefine TopicBody
+
+@apiBody {String} title description
+@apiBody {String} description description]
+@apiBody {String} url description
+@apiBody {String} author description
+@apiBody {String[]} tags description
+"""
+
+"""
+@api {get} /api/v1/topics Voir la liste des veilles
+@apiName getTopics
+@apiGroup Topics     
+
+@apiUse SuccessResult
+
+@apiUse TopicFound
+@apiUse TopicNotFoundError
 """
 @app.route("/api/v1/topics", methods=['GET'])
 def getTopics():
@@ -49,6 +100,18 @@ def getTopics():
     return jsonify({'result' : output})
 
 
+"""
+@api {get} /api/v1/topics/:id Voir une veille
+@apiName getTopic
+@apiGroup Topics
+
+@apiParam {Number} id ID unique des veilles.
+
+@apiUse SuccessResult
+
+@apiUse TopicFound
+@apiUse TopicNotFoundError
+"""
 @app.route("/api/v1/topics/<id>", methods=['GET'])
 def getTopic(id):
     topic = mongo.db.topics
@@ -63,11 +126,24 @@ def getTopic(id):
                 "tags" : search['tags'], # Une liste de tags (non obligatoire)
             }
     else:
-        output = "No such id"
+        output = "Error : Topic not found"
         
     return jsonify({'result' : output})
 
 
+"""
+@api {post} /api/v1/topics Créer une veille
+@apiName addTopic
+@apiGroup Topics
+
+@apiParam {Number} id ID unique des veilles.
+
+@apiUse TopicBody
+@apiUse SuccessResult
+
+@apiUse TopicFound
+@apiUse TopicNotFoundError
+"""
 @app.route("/api/v1/topics", methods=['POST'])
 def addTopic():
     topic = mongo.db.topics    
@@ -98,6 +174,20 @@ def addTopic():
     
     return jsonify({'result' : output})
 
+
+"""
+@api {put} /api/v1/topics/:id Modifier une veille
+@apiName editTopic
+@apiGroup Topics
+
+@apiParam {Number} id ID unique des veilles.
+
+@apiUse TopicBody
+@apiUse SuccessResult
+
+@apiUse TopicFound
+@apiUse TopicNotFoundError
+"""
 @app.route("/api/v1/topics/<id>", methods=['PUT'])
 def editTopic(id):
     topic = mongo.db.topics
@@ -114,7 +204,7 @@ def editTopic(id):
                 "_id": ObjectId(search['_id'])
             }
     else:
-        output = "No such id"
+        output = "Error : Topic not found"
         return jsonify({'result' : output})
     
     data = { 
@@ -142,7 +232,16 @@ def editTopic(id):
     
     return jsonify({'result' : output})
 
+"""
+@api {delete} /api/v1/topics/:id Supprimer une veille
+@apiName delTopic
+@apiGroup Topics
 
+@apiParam {Number} id ID unique des veilles.
+
+@apiUse TopicFound
+@apiUse TopicNotFoundError
+"""
 @app.route("/api/v1/topics/<id>", methods=['DELETE'])
 def delTopic(id):
     topic = mongo.db.topics
@@ -153,6 +252,6 @@ def delTopic(id):
     if del_topic:
         output = "Success : Topic deleted"
     else:
-        output = "No such id"
+        output = "Error : Topic not found"
     
     return jsonify({'result' : output})
