@@ -10,7 +10,7 @@ app = Flask(__name__,
             template_folder='templates/')
 
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask-API"
+app.config["MONGO_URI"] = "mongodb+srv://Yasmine:TUk7taF38eWcx62X@flask-api.ty5l6.mongodb.net/Flask-API?retryWrites=true&w=majority"
 mongo = PyMongo(app)
 
 
