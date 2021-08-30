@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block icon %}../{% endblock %}
+{% block css %}../{% endblock %}
+{% block js %}../{% endblock %}
+
+{% block title %}
+Veille
+{% endblock %}
+
+{% block content %}
+<!-- Page content-->
+<div class="container py-4">
+    <div class="row gx-4 justify-content-center">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="small text-muted">{{ topic.author }}</div>
+                    <h2 class="card-title">{{ topic.title }}</h2>
+                    <p class="card-text" style="min-height: 400px;">{{ topic.description }}</p>
+                    <small class="text-muted">{{ topic.tags }}</small>
+                    <br><br>
+                    <a class="btn btn-warning" href="{{ topic.url }}">Source</a>
+                    <a class="btn btn-primary" href="/">Retour ⇠</a>
+                    <a class="btn btn-info" href="/edit/{{ topic._id }}">Modifier</a>
+                    <a class="btn btn-danger" href="/delete/{{ topic._id }}">Supprimer</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

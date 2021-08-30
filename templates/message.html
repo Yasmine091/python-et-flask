@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block icon %}../{% endblock %}
+{% block css %}../{% endblock %}
+{% block js %}../{% endblock %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+<!-- Page content-->
+<div class="container py-4">
+    <div class="row gx-4 justify-content-center">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="small text-muted">{{ msg.type }}</div>
+                    <h2 class="card-title">{{ msg.content }}</h2>
+                    <p class="card-text"><a class="btn btn-primary" href="/">Retour ⇠</a></p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

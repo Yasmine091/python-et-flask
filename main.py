@@ -2,209 +2,163 @@ from flask import Flask, render_template, request, jsonify, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
+
+
 app = Flask(__name__,
             static_url_path='', 
-            static_folder='apidoc/',
+            static_folder='static/',
             template_folder='templates/')
 
-app.config["MONGO_URI"] = "mongodb+srv://Yasmine:TUk7taF38eWcx62X@flask-api.ty5l6.mongodb.net/Flask-API?retryWrites=true&w=majority"
-# TUk7taF38eWcx62X
+
+app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask-API"
 mongo = PyMongo(app)
+
+
+import crud
+import pwa
+
 
 @app.route("/")
 def home():
-    return redirect("/api/v1", code=302)
-
-@app.route("/api")
-def api_url():
-    return redirect("/api/v1", code=302)
-    
-@app.route("/api/v1")
-def documentation():
-    return app.send_static_file("index.html")
-
-
-"""
-@apiDefine TopicNotFoundError
-
-@apiError TopicNotFound L'id de la veille n'a pas été trouvé.
-
-@apiErrorExample Error-Response:
-    HTTP/1.1 404 Not Found
-    {
-      "Error : Topic not found"
-    }
-"""
-
-"""
-@apiDefine TopicFound
-
-@apiError TopicFound L'id de la veille a été trouvé.
-
-@apiSuccessExample Success-Response:
-    HTTP/1.1 200 OK
-    {
-        "title": "PyMongo",
-        "description" : "Une veille sur l'utilisation de PyMongo",
-        "url" : "https://flapymon.herokuapp.com/",
-        "author" : "John Doe",
-        "tags" : ["Flask", "Python", "MongoDB"]
-    }
-"""
-
-"""
-@apiDefine SuccessResult
-
-@apiSuccess {Number} _id ID de la veille.
-@apiSuccess {String} title Titre de la veille.
-@apiSuccess {String} description Description de la veille.
-@apiSuccess {String} url Lien de la veille.
-@apiSuccess {String} author Autheur de la veille.
-@apiSuccess {String[]} tags Tags.
-"""
-
-"""
-@apiDefine TopicBody
-
-@apiBody {String} title description
-@apiBody {String} description description]
-@apiBody {String} url description
-@apiBody {String} author description
-@apiBody {String[]} tags description
-"""
-
-"""
-@api {get} /api/v1/topics Voir la liste des veilles
-@apiName getTopics
-@apiGroup Topics     
-
-@apiUse SuccessResult
-
-@apiUse TopicFound
-@apiUse TopicNotFoundError
-"""
-@app.route("/api/v1/topics", methods=['GET'])
-def getTopics():
     topic = mongo.db.topics
     output = []
     for search in topic.find():
+        tags = str(search['tags']).replace("[", "")
+        tags = tags.replace("]", "")
+        tags = tags.replace("'", "")
         output.append({
                 "_id": str(search['_id']),
                 "title": search['title'], # Un titre (obligatoire)
                 "description" : search['description'], # Une description courte (non obligatoire)
                 "url" : search['url'], # Un lien (obligatoire)
                 "author" : search['author'], # Un auteur (obligatoire)
-                "tags" : search['tags'], # Une liste de tags (non obligatoire)
+                "tags" : tags, # Une liste de tags (non obligatoire)
             })
-    return jsonify({'result' : output})
+    return render_template("home.html", topics=output)
 
 
-"""
-@api {get} /api/v1/topics/:id Voir une veille
-@apiName getTopic
-@apiGroup Topics
+@app.route("/list")
+def list():
+    return home()
 
-@apiParam {Number} id ID unique des veilles.
 
-@apiUse SuccessResult
-
-@apiUse TopicFound
-@apiUse TopicNotFoundError
-"""
-@app.route("/api/v1/topics/<id>", methods=['GET'])
-def getTopic(id):
+@app.route("/topic/<id>")
+def topic(id):
     topic = mongo.db.topics
     search = topic.find_one({'_id': ObjectId(id)})
     if search:
+        tags = str(search['tags']).replace("[", "")
+        tags = tags.replace("]", "")
+        tags = tags.replace("'", "")
         output = {
                 "_id": str(search['_id']),
                 "title": search['title'], # Un titre (obligatoire)
                 "description" : search['description'], # Une description courte (non obligatoire)
                 "url" : search['url'], # Un lien (obligatoire)
                 "author" : search['author'], # Un auteur (obligatoire)
-                "tags" : search['tags'], # Une liste de tags (non obligatoire)
-            }
-    else:
-        output = "Error : Topic not found"
-        
-    return jsonify({'result' : output})
-
-
-"""
-@api {post} /api/v1/topics Créer une veille
-@apiName addTopic
-@apiGroup Topics
-
-@apiParam {Number} id ID unique des veilles.
-
-@apiUse TopicBody
-@apiUse SuccessResult
-
-@apiUse TopicFound
-@apiUse TopicNotFoundError
-"""
-@app.route("/api/v1/topics", methods=['POST'])
-def addTopic():
-    topic = mongo.db.topics    
-    title = request.json['title']
-    desc = request.json['description']
-    url = request.json['url']
-    author = request.json['author']
-    tags = request.json.get('tags', [])
-    
-    topic_id = topic.insert({
-                "title": title, # Un titre (obligatoire)
-                "description" : desc, # Une description courte (non obligatoire)
-                "url" : url, # Un lien (obligatoire)
-                "author" : author, # Un auteur (obligatoire)
                 "tags" : tags, # Une liste de tags (non obligatoire)
-            })
-    
-    new_topic = topic.find_one({'_id': topic_id })
-    
-    output = {  
-                "_id": str(new_topic['_id']),
-                "title": new_topic['title'], # Un titre (obligatoire)
-                "description" : new_topic['description'], # Une description courte (non obligatoire)
-                "url" : new_topic['url'], # Un lien (obligatoire)
-                "author" : new_topic['author'], # Un auteur (obligatoire)
-                "tags" : new_topic['tags'], # Une liste de tags (non obligatoire)
             }
+        return render_template("topic.html", topic=output)
+    else:
+        output = {
+            "type": "Erreur",
+            "content": "Veille non trouvé"
+        }
+        return render_template("message.html", msg=output)
+        
+
+@app.route("/new")
+def new():
+    return render_template("new.html")        
+        
+        
+@app.route("/add", methods=["POST"])
+def add():
+    topic = mongo.db.topics
     
-    return jsonify({'result' : output})
+    title = request.form['title']
+    desc = request.form['desc']
+    url = request.form['url']
+    author = request.form['author']
+    tags = request.form['tags'] or []
+    
+    if type(tags) == str:
+        tags = tags.replace(" ", "")
+        tags = tags.split(',')
+    
+    if title == '' or desc == '' or url == '' or author == '':
+        output = {
+            "type": "Erreur",
+            "content": "Vous devez remplire tous les champs"
+        }
+        
+        return render_template("message.html", msg=output)
+    else: 
+        topic.insert({
+                    "title": title, # Un titre (obligatoire)
+                    "description" : desc, # Une description courte (non obligatoire)
+                    "url" : url, # Un lien (obligatoire)
+                    "author" : author, # Un auteur (obligatoire)
+                    "tags" : tags, # Une liste de tags (non obligatoire)
+                })
+    
+        output = {
+                "type": "Succès",
+                "content": "Veille enregistrée"
+        }
+        
+        return render_template("message.html", msg=output)
 
 
-"""
-@api {put} /api/v1/topics/:id Modifier une veille
-@apiName editTopic
-@apiGroup Topics
+@app.route("/edit/<id>")
+def edit(id):
+    topic = mongo.db.topics
+    search = topic.find_one({'_id': ObjectId(id)})
+    if search:
+        tags = str(search['tags']).replace("[", "")
+        tags = tags.replace("]", "")
+        tags = tags.replace("'", "")
+        output = {
+                "_id": str(search['_id']),
+                "title": search['title'], # Un titre (obligatoire)
+                "description" : search['description'], # Une description courte (non obligatoire)
+                "url" : search['url'], # Un lien (obligatoire)
+                "author" : search['author'], # Un auteur (obligatoire)
+                "tags" : tags, # Une liste de tags (non obligatoire)
+            }
+        return render_template("edit.html", topic=output)
+    else:
+        output = {
+            "type": "Erreur",
+            "content": "Veille non trouvée"
+        }
+        return render_template("message.html", msg=output)
 
-@apiParam {Number} id ID unique des veilles.
-
-@apiUse TopicBody
-@apiUse SuccessResult
-
-@apiUse TopicFound
-@apiUse TopicNotFoundError
-"""
-@app.route("/api/v1/topics/<id>", methods=['PUT'])
-def editTopic(id):
+@app.route("/save/<id>", methods=["POST"])
+def update(id):
     topic = mongo.db.topics
     search = topic.find_one({'_id': ObjectId(id)})
     
-    title = request.json.get('title', search['title'])
-    desc = request.json.get('description', search['description'])
-    url = request.json.get('url', search['url'])
-    author = request.json.get('author', search['author'])
-    tags = request.json.get('tags', search['tags'])
+    title = request.form['title'] or search['title']
+    desc = request.form['desc'] or search['description']
+    url = request.form['url'] or search['url']
+    author = request.form['author'] or search['author']
+    tags = request.form['tags'] or []
+    
+    if type(tags) == str:
+        tags = tags.replace(" ", "")
+        tags = tags.split(',')
     
     if search:
         query = {
                 "_id": ObjectId(search['_id'])
             }
     else:
-        output = "Error : Topic not found"
-        return jsonify({'result' : output})
+        output = {
+            "type": "Erreur",
+            "content": "Veille non trouvée"
+        }
+        return render_template("message.html", msg=output)
     
     data = { 
             "$set": {
@@ -218,39 +172,40 @@ def editTopic(id):
     
     topic_id = topic.update_one(query, data)
     
-    get_topic = topic.find_one({'_id': ObjectId(id)})
-    
-    output = {  
-                "_id": str(get_topic['_id']),
-                "title": get_topic['title'], # Un titre (obligatoire)
-                "description" : get_topic['description'], # Une description courte (non obligatoire)
-                "url" : get_topic['url'], # Un lien (obligatoire)
-                "author" : get_topic['author'], # Un auteur (obligatoire)
-                "tags" : get_topic['tags'], # Une liste de tags (non obligatoire)
-            }
-    
-    return jsonify({'result' : output})
+    output = {
+            "type": "Succès",
+            "content": "Veille enregistrée"
+    }
+    return render_template("message.html", msg=output)
 
-"""
-@api {delete} /api/v1/topics/:id Supprimer une veille
-@apiName delTopic
-@apiGroup Topics
 
-@apiParam {Number} id ID unique des veilles.
-
-@apiUse TopicFound
-@apiUse TopicNotFoundError
-"""
-@app.route("/api/v1/topics/<id>", methods=['DELETE'])
-def delTopic(id):
+@app.route("/delete/<id>")
+def delete(id):
     topic = mongo.db.topics
     
     get_topic = topic.find_one({'_id': ObjectId(id)})
-    del_topic = topic.delete_one({'_id': get_topic['_id']})
     
-    if del_topic:
-        output = "Success : Topic deleted"
+    if get_topic:
+        del_topic = topic.delete_one({'_id': get_topic['_id']})
+        output = {
+            "type": "Succès",
+            "content": "Veille supprimée"
+        }
     else:
-        output = "Error : Topic not found"
+        output = {
+            "type": "Erreur",
+            "content": "Veille non trouvée"
+        }
     
-    return jsonify({'result' : output})
+    
+    return render_template("message.html", msg=output)
+
+
+@app.route("/api")
+def api_url():
+    return redirect("/api/v1", code=302)
+    
+    
+@app.route("/api/v1")
+def documentation():
+    return app.send_static_file("api/index.html")

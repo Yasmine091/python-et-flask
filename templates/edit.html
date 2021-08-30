@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block icon %}../{% endblock %}
+{% block css %}../{% endblock %}
+{% block js %}../{% endblock %}
+
+{% block title %}
+Modification
+{% endblock %}
+
+{% block content %}
+<!-- Page content-->
+<div class="container py-4">
+    <div class="row gx-4 justify-content-center">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <form action="/save/{{ topic._id }}" method="POST">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Titre</label>
+                    <input type="text" class="form-control" name="title" id="exampleFormControlInput1"
+                        placeholder="Veille sur Firebase" value="{{ topic.title }}">
+                </div>
+                <div class="form-group">
+                    <br>
+                    <label for="exampleFormControlTextarea1">Description</label>
+                    <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="3">{{ topic.description }}</textarea>
+                </div>
+                <div class="form-group">
+                    <br>
+                    <label for="exampleFormControlInput1">Lien</label>
+                    <input type="text" class="form-control" name="url" id="exampleFormControlInput1"
+                        placeholder="https://www.example.com/topics/mytopic.html" value="{{ topic.url }}">
+                </div>
+                <div class="form-group">
+                    <br>
+                    <label for="exampleFormControlInput1">Auteur</label>
+                    <input type="text" class="form-control" name="author" id="exampleFormControlInput1"
+                        placeholder="John Doe" value="{{ topic.author }}">
+                </div>
+                <div class="form-group">
+                    <br>
+                    <label for="exampleFormControlInput1">Tags (séparés par des ,)</label>
+                    <input type="text" class="form-control" name="tags" id="exampleFormControlInput1" placeholder="Firebase, Python, Google, Django, Flask.." value="{{ topic.tags }}">
+                </div>
+                <div class="form-group">
+                    <br>
+                    <button type="submit" class="btn btn-success mb-2">Sauvegarder les modifications</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
